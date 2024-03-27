@@ -3,24 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black & Yellow Paste Bin</title>
+    <title>Pasteshare - Simple CopyPaste Tool</title>
+    <meta name="description" content="Pasteshare is a simple web application for sharing text content with others through generated links.">
+    <meta name="keywords" content="pasteshare, paste, share, text, content, link, sharing, web application">
+    <meta name="author" content="Iman Banerjee - Lexo">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta property="og:title" content="Pasteshare">
+    <meta property="og:description" content="Pasteshare is a simple web application for sharing text content with others through generated links.">
+    <meta property="og:type" content="website">
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+
     <div class="container">
         <div class="content">
-            <h1>Black & Yellow Paste Bin</h1>
+            <h1>Pasteshare</h1>
             <textarea id="pasteText" placeholder="Paste anything here..."></textarea>
-            <button onclick="createLink()">Create Link</button>
+            <div id="buttons">
+                <button onclick="createLink()">Create Link</button>
+                <button onclick="copyLink()" id="copyLinkButton" style="display: none;">Copy Link</button>
+                <button onclick="copyText()" id="copyTextButton" style="display: none;">Copy Text</button>
+                <button onclick="clearText()" id="clearTextButton" style="display: none;">Clear Text</button>
+            </div>
             <div id="linkContainer" style="display: none;">
                 <div class="link-info">
                     <p>Share this link:</p>
                     <input type="text" id="linkInput" readonly>
-                    <button onclick="copyLink()">Copy Link</button>
                 </div>
             </div>
         </div>
     </div>
+
+
     <script src="scripts.js"></script>
+
 </body>
 </html>
