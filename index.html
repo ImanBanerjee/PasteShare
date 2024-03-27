@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black & Yellow Paste Bin</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>Black & Yellow Paste Bin</h1>
+            <textarea id="pasteText" placeholder="Paste anything here..."></textarea>
+            <button onclick="createLink()">Create Link</button>
+            <div id="linkContainer" style="display: none;">
+                <div class="link-info">
+                    <p>Share this link:</p>
+                    <input type="text" id="linkInput" readonly>
+                    <button onclick="copyLink()">Copy Link</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

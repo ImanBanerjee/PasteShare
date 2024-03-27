@@ -1,0 +1,99 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #222;
+}
+
+.content {
+    max-width: 600px;
+    width: 90%;
+    padding: 30px;
+    background-color: #111;
+    border: 2px solid #ffcc00;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffcc00;
+}
+
+textarea {
+    width: calc(100% - 5px); /* Adjusted width to account for border */
+    min-height: 150px;
+    padding: 10px; /* Adjusted padding */
+    margin-bottom: 20px;
+    border: 2px solid #ffcc00;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    resize: none;
+    box-sizing: border-box;
+}
+
+button {
+    display: block;
+    width: calc(100% - 5px); /* Adjusted width to match textarea */
+    padding: 10px 0; /* Removed padding */
+    margin-top: 10px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 5px;
+    color: #000;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+button:hover {
+    background-color: #ffc200;
+}
+
+#linkContainer {
+    margin-top: 20px;
+}
+
+.link-info {
+    display: flex;
+    align-items: center;
+}
+
+.link-info p {
+    margin: 0;
+}
+
+.link-info input[type="text"] {
+    flex: 1;
+    margin-left: 10px;
+    padding: 8px;
+    border: 2px solid #ffcc00;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+}
+
+.link-info button {
+    margin-left: 10px;
+}
