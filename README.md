@@ -9,7 +9,7 @@ Pasteshare provides an easy way to share text content by generating unique links
 
 ## Demo
 
-You can access the live demo of Pasteshare hosted on GitHub Pages [here](https://yourusername.github.io/pasteshare/).
+You can access the live demo of Pasteshare hosted on GitHub Pages [here](https://paste.imanbanerjee.tech).
 
 ## Features
 
