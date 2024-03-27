@@ -1,6 +1,4 @@
-Sure, here's a more detailed README.md tailored for a GitHub Pages hosted website:
 
-````markdown
 # Pasteshare
 
 Pasteshare is a simple web application for sharing text content with others through generated links. This project is hosted on GitHub Pages.
@@ -37,7 +35,7 @@ To run Pasteshare locally:
    ```sh
    git clone https://github.com/yourusername/pasteshare.git
    ```
-````
+
 
 2. Navigate to the project directory:
    ```sh
@@ -66,7 +64,4 @@ Contributions are welcome! Please follow the [Contributing Guidelines](CONTRIBUT
 
 This project is licensed under the [MIT License](LICENSE).
 
-```
 
-Make sure to replace placeholders like `yourusername` with your actual GitHub username and customize content as needed. This README.md provides more detailed instructions, including how to deploy the website to GitHub Pages.
-```
