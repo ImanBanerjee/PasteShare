@@ -1,85 +1,160 @@
-/* ---------- Utilities ---------- */
+/* ===== scripts.js ===== */
+(() => {
+  "use strict";
 
-function generateCode() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-}
+  /* ───────────── Constants ───────────── */
+  const STORAGE_PREFIX = "pastes:";
+  const ID_LENGTH = 6;
 
-function showControls(show) {
-    document.getElementById("linkContainer").style.display = show ? "block" : "none";
-    document.getElementById("copyLinkButton").style.display = show ? "inline-block" : "none";
-    document.getElementById("copyTextButton").style.display = show ? "inline-block" : "none";
-    document.getElementById("clearTextButton").style.display = show ? "inline-block" : "none";
-}
+  /* ───────────── Elements ───────────── */
+  const textarea = document.getElementById("paste");
+  const createBtn = document.getElementById("createBtn");
+  const copyLinkBtn = document.getElementById("copyLinkBtn");
+  const copyTextBtn = document.getElementById("copyTextBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const statusEl = document.getElementById("status");
 
-/* ---------- Core Logic ---------- */
+  let currentId = null;
 
-function createLink() {
-    const textarea = document.getElementById("pasteText");
+  /* ───────────── Utilities ───────────── */
+  const autoResize = () => {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+  };
+
+  const generateId = () => {
+    const min = Math.pow(10, ID_LENGTH - 1);
+    const max = Math.pow(10, ID_LENGTH) - 1;
+    return String(
+      Math.floor(Math.random() * (max - min + 1)) + min
+    );
+  };
+
+  const savePaste = (id, content) => {
+    localStorage.setItem(STORAGE_PREFIX + id, content);
+  };
+
+  const loadPaste = (id) => {
+    return localStorage.getItem(STORAGE_PREFIX + id);
+  };
+
+  const setReadonlyMode = (readonly) => {
+    textarea.readOnly = readonly;
+    createBtn.disabled = readonly;
+    copyLinkBtn.disabled = !readonly;
+  };
+
+  const setStatus = (message) => {
+    statusEl.textContent = message || "";
+  };
+
+  const updateURL = (id) => {
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    const base = "/" + parts.slice(0, parts.length - 1).join("/");
+    const url = (base.endsWith("/") ? base : base + "/") + id;
+    history.pushState({ id }, "", url);
+  };
+
+  const resetURL = () => {
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    const base = "/" + parts.slice(0, parts.length - 1).join("/");
+    history.pushState({}, "", base || "/");
+  };
+
+  const extractIdFromURL = () => {
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    const last = parts[parts.length - 1];
+    return /^\d{6}$/.test(last) ? last : null;
+  };
+
+  /* ───────────── Actions ───────────── */
+  createBtn.addEventListener("click", () => {
     const content = textarea.value.trim();
-
     if (!content) {
-        alert("You can't share empty text.");
-        return;
+      setStatus("Nothing to save.");
+      return;
     }
 
-    const code = generateCode();
-    localStorage.setItem("paste_" + code, content);
+    let id;
+    do {
+      id = generateId();
+    } while (loadPaste(id) !== null);
 
-    const link = `${window.location.origin}/PasteShare/${code}`;
+    savePaste(id, content);
+    currentId = id;
 
-    document.getElementById("linkInput").value = link;
-    textarea.setAttribute("readonly", true);
-    showControls(true);
+    updateURL(id);
+    setReadonlyMode(true);
+    setStatus("Link created.");
+  });
 
-    // Update browser URL without reloading
-    window.history.pushState({}, "", `/PasteShare/${code}`);
-}
+  copyLinkBtn.addEventListener("click", async () => {
+    if (!currentId) return;
 
-function copyLink() {
-    const input = document.getElementById("linkInput");
-    input.select();
-    document.execCommand("copy");
-    alert("Link copied");
-}
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setStatus("Link copied.");
+    } catch {
+      setStatus("Clipboard access failed.");
+    }
+  });
 
-function copyText() {
-    const textarea = document.getElementById("pasteText");
-    textarea.select();
-    document.execCommand("copy");
-    alert("Text copied");
-}
+  copyTextBtn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(textarea.value);
+      setStatus("Text copied.");
+    } catch {
+      setStatus("Clipboard access failed.");
+    }
+  });
 
-function clearText() {
-    const textarea = document.getElementById("pasteText");
-
+  clearBtn.addEventListener("click", () => {
     textarea.value = "";
-    textarea.removeAttribute("readonly");
+    autoResize();
+    setReadonlyMode(false);
+    currentId = null;
+    setStatus("");
+    resetURL();
+  });
 
-    document.getElementById("linkInput").value = "";
-    showControls(false);
+  textarea.addEventListener("input", autoResize);
 
-    // Reset URL cleanly
-    window.history.pushState({}, "", "/PasteShare/");
-}
+  window.addEventListener("popstate", () => {
+    const id = extractIdFromURL();
+    if (!id) return;
 
-/* ---------- Load From URL ---------- */
-
-window.onload = function () {
-    const pathParts = window.location.pathname.split("/");
-    const code = pathParts[pathParts.length - 1];
-
-    if (/^\d{6}$/.test(code)) {
-        const stored = localStorage.getItem("paste_" + code);
-
-        if (stored) {
-            const textarea = document.getElementById("pasteText");
-            textarea.value = stored;
-            textarea.setAttribute("readonly", true);
-
-            document.getElementById("linkInput").value =
-                `${window.location.origin}/PasteShare/${code}`;
-
-            showControls(true);
-        }
+    const data = loadPaste(id);
+    if (data === null) {
+      setStatus("Paste not found.");
+      return;
     }
-};
+
+    textarea.value = data;
+    autoResize();
+    currentId = id;
+    setReadonlyMode(true);
+    setStatus("Viewing saved paste.");
+  });
+
+  /* ───────────── Init ───────────── */
+  const init = () => {
+    autoResize();
+
+    const id = extractIdFromURL();
+    if (!id) return;
+
+    const data = loadPaste(id);
+    if (data === null) {
+      setStatus("Paste not found.");
+      return;
+    }
+
+    textarea.value = data;
+    autoResize();
+    currentId = id;
+    setReadonlyMode(true);
+    setStatus("Viewing saved paste.");
+  };
+
+  init();
+})();
