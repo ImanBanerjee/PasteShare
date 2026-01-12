@@ -1,42 +1,55 @@
+<!-- ===== index.html ===== -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PasteShare</title>
 
-    <title>Pasteshare - Simple CopyPaste Tool</title>
+  <!-- Dark mode hint for browsers -->
+  <meta name="color-scheme" content="dark">
 
-    <meta name="description" content="Pasteshare is a simple web application for sharing text content through clean generated links.">
-    <meta name="author" content="Iman Banerjee - Lexo">
-
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="favicon.png">
+  <!-- App styles -->
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <div class="container">
-        <div class="content">
-            <h1>Pasteshare</h1>
+  <main class="app">
+    <section class="card" role="region" aria-label="Paste editor">
+      <header class="header">
+        <div class="brand">PasteShare</div>
+        <div id="status" class="status" aria-live="polite"></div>
+      </header>
 
-            <textarea
-                id="pasteText"
-                placeholder="Paste anything here..."
-                rows="10"></textarea>
+      <textarea
+        id="paste"
+        class="paste"
+        placeholder="Paste your text here…"
+        rows="6"
+        spellcheck="false"
+        aria-label="Paste content"
+      ></textarea>
 
-            <div id="buttons">
-                <button onclick="createLink()">Create Link</button>
-                <button onclick="copyLink()" id="copyLinkButton" style="display:none;">Copy Link</button>
-                <button onclick="copyText()" id="copyTextButton" style="display:none;">Copy Text</button>
-                <button onclick="clearText()" id="clearTextButton" style="display:none;">Clear Text</button>
-            </div>
+      <footer class="actions">
+        <button id="createBtn" class="btn primary" type="button">
+          Create Link
+        </button>
 
-            <div id="linkContainer" style="display:none;">
-                <p>Share this link:</p>
-                <input type="text" id="linkInput" readonly>
-            </div>
-        </div>
-    </div>
+        <button id="copyLinkBtn" class="btn" type="button" disabled>
+          Copy Link
+        </button>
 
-    <script src="scripts.js"></script>
+        <button id="copyTextBtn" class="btn" type="button">
+          Copy Text
+        </button>
+
+        <button id="clearBtn" class="btn ghost" type="button">
+          Clear Paste
+        </button>
+      </footer>
+    </section>
+  </main>
+
+  <!-- App logic -->
+  <script src="scripts.js"></script>
 </body>
 </html>
